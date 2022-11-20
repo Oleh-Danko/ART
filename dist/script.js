@@ -954,8 +954,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var modals = function modals() {
+  var btnPressed = false;
+
   function bindModal(triggerSelector, modalSelector, closeSelector) {
-    var closeClickOverlay = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var destroy = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     var trigger = document.querySelectorAll(triggerSelector),
         modal = document.querySelector(modalSelector),
         close = document.querySelector(closeSelector),
@@ -967,6 +969,11 @@ var modals = function modals() {
           e.preventDefault();
         }
 
+        if (destroy) {
+          item.remove();
+        }
+
+        btnPressed = true;
         openModal();
       });
     });
@@ -974,6 +981,7 @@ var modals = function modals() {
     function openModal() {
       windows.forEach(function (item) {
         item.style.display = 'none';
+        item.classList.add('animated', 'swing');
       });
       modal.style.display = 'flex';
       document.body.style.overflow = 'hidden';
@@ -993,7 +1001,7 @@ var modals = function modals() {
       closeModal();
     });
     modal.addEventListener('click', function (e) {
-      if (e.target === modal && closeClickOverlay) {
+      if (e.target === modal) {
         closeModal();
       }
     });
@@ -1005,12 +1013,13 @@ var modals = function modals() {
       document.querySelectorAll('[data-modal]').forEach(function (item) {
         if (getComputedStyle(item).display !== 'none') {
           display = true;
-        } else {}
+        }
       });
 
       if (!display) {
         document.querySelector(selector).style.display = 'block';
         document.body.style.overflow = 'hidden';
+        document.body.style.marginRight = "".concat(scroll, "px");
       }
     }, time);
   }
@@ -1027,9 +1036,21 @@ var modals = function modals() {
     return scrollWidth;
   }
 
+  function openByScroll(selector) {
+    window.addEventListener('scroll', function () {
+      var scrollHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+
+      if (!btnPressed && window.pageYOffset + document.documentElement.clientHeight >= scrollHeight) {
+        document.querySelector(selector).click();
+      }
+    });
+  }
+
   bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
   bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-  showModalByTime('.popup-consultation', 60000);
+  bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+  openByScroll('.fixed-gift');
+  showModalByTime('.popup-consultation', 60000000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
