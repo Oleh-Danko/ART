@@ -3,7 +3,8 @@ import { postData } from "../services/requests";
 const forms = () => {
     const form = document.querySelectorAll('form'),
           inputs = document.querySelectorAll('input'),
-          upload = document.querySelectorAll('[name="upload"]');
+          upload = document.querySelectorAll('[name="upload"]'),
+          option = document.querySelectorAll('option');
 
     // checkNumInputs('input[name="user_phone"]');
 
@@ -44,13 +45,21 @@ const forms = () => {
         });
     });
 
+    let state = {};
+
+    option.forEach((item, num) => {
+        item.addEventListener('change', () => {
+            state.size = num;
+            console.log(state);
+        });
+    });
+
     form.forEach(item => {
         item.addEventListener('submit', (e) => {
             e.preventDefault();
 
             let statusMessage = document.createElement('div');
             statusMessage.classList.add('status');
-            // statusMessage.style.textAlign = 'right';
             item.parentNode.appendChild(statusMessage);
 
             item.classList.add('animated', 'fadeOutUp');

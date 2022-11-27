@@ -18,7 +18,7 @@ const showMoreStyle = (trigger, wrapper) => {
             .then(res => createCards(res))
             .catch(error => {
                 let card = document.createElement('div');
-                card.textContent = error;
+                card.textContent = 'error';
                 card.style.color = 'red';
                 card.style.textAlign = 'centr';
                 document.querySelector(wrapper).appendChild(card);
