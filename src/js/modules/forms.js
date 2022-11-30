@@ -10,7 +10,7 @@ const forms = () => {
 
     const message = {
         loading: 'Загрузка',
-        succes: 'Дякуємо за заявку!',
+        success: 'Дякуємо за заявку!',
         failure: 'Щось пішло не так...',
         spinner: 'assets/img/spinner.gif',
         ok: 'assets/img/ok.png',
@@ -77,15 +77,15 @@ const forms = () => {
             statusMessage.appendChild(textMessage);
 
             const formData = new FormData(item);
-            let api;
-            item.closest('.popup-design') ? api = path.designer : api = path.question;
+            let api;      
+            item.closest('.popup-design') || item.classList.contains('calc_form') ? api = path.designer : api = path.question;
             console.log(api);
 
             postData(api, formData)
                 .then(res => {
                     console.log(res);
                     statusImg.setAttribute('src', message.ok);
-                    textMessage.textContent = message.succes;
+                    textMessage.textContent = message.success;
                 })
                 .catch(() => {
                     statusImg.setAttribute("src", message.fail);
@@ -102,7 +102,6 @@ const forms = () => {
                 });
         });
     });
-
 };
 
 export default forms;
